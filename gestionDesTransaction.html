@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Exercice Transaction</title>
+</head>
+<body>
+
+ <h2>Formulaire de Transaction</h2>
+
+ <div>
+ <label for="produit">Produit :</label>
+ <select id="produit">
+ <!-- Les options seront ajoutées par JavaScript -->
+ </select>
+ <input type="text" id="nouveauProduit" placeholder="Ajouter un nouveau produit">
+ <button id="ajouterProduit">Ajouter Produit</button>
+ </div>
+
+ <div>
+ <label for="prix">Prix :</label>
+ <input type="number" id="prix">
+ </div>
+
+ <div>
+ <label for="quantite">Quantité :</label>
+ <input type="number" id="quantite">
+ </div>
+
+ <button id="ajouterTransaction">Ajouter Transaction</button>
+
+ <h2>Transactions</h2>
+ <table id="tableauTransactions">
+ <thead>
+ <tr>
+ <th>Produit</th>
+ <th>Prix</th>
+ <th>Quantité</th>
+ <th>Total</th>
+ </tr>
+ </thead>
+ <tbody>
+ <!-- Les transactions seront ajoutées par JavaScript -->
+ </tbody>
+ </table>
+
+ <div>
+ <p>Total des prix: <span id="totalPrix">0</span></p>
+ <p>Nombre de transactions: <span id="nombreTransactions">0</span></p>
+ </div>
+
+ <script>
+        const produits = []; 
+        const transactions = []; 
+        const selectProduit = document.getElementById('produit');
+        const inputNouveauProduit = document.getElementById('nouveauProduit');
+        const boutonAjouterProduit = document.getElementById('ajouterProduit');
+        const inputPrix = document.getElementById('prix');
+        const inputQuantite = document.getElementById('quantite');
+        const boutonAjouterTransaction = document.getElementById('ajouterTransaction');
+        const tableauTransactions = document.getElementById('tableauTransactions');
+        const totalPrixAffiche = document.getElementById('totalPrix');
+        const nombreTransactionsAffiche = document.getElementById('nombreTransactions');
+
+        function ajouterNouveauProduit() {
+          const nouveauProduit = inputNouveauProduit.value.trim();
+        
+          if (nouveauProduit) {
+            if (!produits.includes(nouveauProduit)) {
+              produits.push(nouveauProduit);
+            
+              const option = document.createElement('option');
+              option.value = nouveauProduit;
+              option.textContent = nouveauProduit;
+              selectProduit.appendChild(option);
+            
+              inputNouveauProduit.value = ''; 
+            } else {
+              alert('Ce produit existe déjà dans la liste.');
+            }
+            } else {
+            alert('Veuillez saisir un nom de produit valide.');
+            }
+        }
+
+        function ajouterTransaction() {
+          const produit = selectProduit.value;
+          const prix = parseFloat(inputPrix.value);
+          const quantite = parseInt(inputQuantite.value);
+        
+          if (produit && prix > 0 && quantite > 0) {
+            const transaction = {
+              produit,
+              prix,
+              quantite,
+              total: prix * quantite
+            };
+        
+            transactions.push(transaction);
+        
+            const ligne = tableauTransactions.insertRow();
+            const celluleProduit = ligne.insertCell();
+            const cellulePrix = ligne.insertCell();
+            const celluleQuantite = ligne.insertCell();
+            const celluleTotal = ligne.insertCell();
+        
+            celluleProduit.textContent = produit;
+            cellulePrix.textContent = prix.toFixed(2);
+            celluleQuantite.textContent = quantite;
+            celluleTotal.textContent = transaction.total.toFixed(2);
+        
+            calculerTotaux();
+        
+            inputPrix.value = '';
+            inputQuantite.value = '';
+          } else {
+            alert('Veuillez remplir tous les champs avec des valeurs valides.');
+          }
+        }
+
+        function calculerTotaux() {
+          let totalPrix = 0;
+          let nombreTransactions = 0;
+        
+          for (const transaction of transactions) {
+            totalPrix += transaction.total;
+            nombreTransactions++;
+          }
+      
+          totalPrixAffiche.textContent = totalPrix.toFixed(2);
+          nombreTransactionsAffiche.textContent = nombreTransactions;
+        }
+
+        boutonAjouterProduit.addEventListener('click', ajouterNouveauProduit);
+        boutonAjouterTransaction.addEventListener('click', ajouterTransaction);
+
+        // _________________________________________________________________________
+
+        function ajouterTransaction() {
+        const produit = selectProduit.value;
+        const prix = parseFloat(inputPrix.value);
+        const quantite = parseInt(inputQuantite.value);
+
+        if (produit && prix > 0 && quantite > 0) {
+        const transaction = {
+      produit,
+      prix,
+      quantite,
+      total: prix * quantite
+        };
+
+    transactions.push(transaction);
+
+    const ligne = tableauTransactions.insertRow();
+    const celluleProduit = ligne.insertCell();
+    const cellulePrix = ligne.insertCell();
+    const celluleQuantite = ligne.insertCell();
+    const celluleTotal = ligne.insertCell();
+
+    celluleProduit.textContent = produit;
+    cellulePrix.textContent = prix.toFixed(2);
+    celluleQuantite.textContent = quantite;
+    celluleTotal.textContent = transaction.total.toFixed(2);
+
+    calculerTotaux();
+
+    inputPrix.value = '';
+    inputQuantite.value = '';
+  } else {
+    alert('Veuillez remplir tous les champs avec des valeurs valides.');
+  }
+}
+
+
+    /*
+           
+  function ajouterTransaction() {
+  const produit = selectProduit.value;
+  const prix = parseFloat(inputPrix.value);
+  const quantite = parseInt(inputQuantite.value);
+
+  if (produit && prix > 0 && quantite > 0) {
+    const transaction = {
+      produit,
+      prix,
+      quantite,
+      total: prix * quantite
+    };
+
+    transactions.push(transaction);
+
+    // Afficher la transaction dans le tableau
+    const ligne = tableauTransactions.insertRow();
+    const celluleProduit = ligne.insertCell();
+    const cellulePrix = ligne.insertCell();
+    const celluleQuantite = ligne.insertCell();
+    const celluleTotal = ligne.insertCell();
+
+    celluleProduit.textContent = produit;
+    cellulePrix.textContent = prix.toFixed(2);
+    celluleQuantite.textContent = quantite;
+    celluleTotal.textContent = transaction.total.toFixed(2);
+
+    // Mettre à jour les totaux
+    calculerTotaux();
+
+    // Vider les champs de saisie
+    inputPrix.value = '';
+    inputQuantite.value = '';
+    } else {
+    alert('Veuillez remplir tous les champs avec des valeurs valides.');
+    }
+    }
+
+
+    */
+
+    </script>
+
+ </body>
+ </html>
