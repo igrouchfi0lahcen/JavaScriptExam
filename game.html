@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #gameArea {
+            position: relative;
+            height: 500px;
+            width: 500px;
+            border: 1px solid black;
+            overflow: hidden; /* Add this to keep the balls inside */
+        }
+        .ball {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
+        }
+        #collector {
+            position: absolute;
+            bottom: 0;
+            width: 75px;
+            height: 20px;
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameArea">
+        <div id="collector"></div>
+    </div>
+
+    <script>
+        var gameArea = document.getElementById('gameArea');
+        var collector = document.getElementById('collector');
+
+        gameArea.addEventListener('mousemove', function(e) {
+            collector.style.left = e.pageX - collector.offsetWidth / 2 + 'px';
+        });
+
+        setInterval(createBall, 1000);
+
+        function createBall() {
+            var ball = document.createElement('div');
+            ball.classList.add('ball');
+            ball.style.left = Math.random() * (gameArea.offsetWidth - ball.offsetWidth) + 'px';
+            gameArea.appendChild(ball);
+            moveBall(ball);
+        }
+
+        function moveBall(ball) {
+            ball.interval = setInterval(function() {
+                ball.style.top = ball.offsetTop + 1 + 'px';
+
+                if (isColliding(ball, collector)) {
+                    ball.remove();
+                }
+
+                if (ball.offsetTop + ball.offsetHeight > gameArea.offsetHeight) {
+                    ball.remove();
+                }
+            }, 10);
+        }
+
+        function isColliding(el1, el2) {
+            var rect1 = el1.getBoundingClientRect();
+            var rect2 = el2.getBoundingClientRect();
+
+            return !(rect1.bottom < rect2.top || 
+                     rect1.top > rect2.bottom || 
+                     rect1.right < rect2.left || 
+                     rect1.left > rect2.right);
+        }
+    </script>
+</body>
+</html>
